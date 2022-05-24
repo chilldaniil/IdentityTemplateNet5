@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Reflection;
+using App.DataContract.Entities;
 using App.DataContract.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.DataContract.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class ApplicationDbContext : IdentityDbContext<
+        ApplicationUser, ApplicationRole, Guid,
+        ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
+        ApplicationRoleClaim, ApplicationUserToken>
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions)
@@ -22,6 +26,6 @@ namespace App.DataContract.EF
         }
 
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Users { get; set; }
     }
 }

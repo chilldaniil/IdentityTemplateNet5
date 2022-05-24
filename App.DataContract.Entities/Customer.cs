@@ -1,9 +1,10 @@
 ﻿using System;
 using App.DataContract.Contract;
+using App.DataContract.Entities.Identity;
 
-namespace App.DataContract.Entities.Identity
+namespace App.DataContract.Entities
 {
-    public class User : ApplicationUser, IAggregateRoot
+    public class Customer : ApplicationUser, IAggregateRoot
     {
         public string Phone { get; set; }
         public bool IsDeleted { get; set; }

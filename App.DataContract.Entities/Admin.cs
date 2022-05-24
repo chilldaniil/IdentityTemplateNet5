@@ -1,7 +1,8 @@
 ﻿using System;
 using App.DataContract.Contract;
+using App.DataContract.Entities.Identity;
 
-namespace App.DataContract.Entities.Identity
+namespace App.DataContract.Entities
 {
     public class Admin : ApplicationUser, IAggregateRoot
     {

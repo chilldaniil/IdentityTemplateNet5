@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace App.DataContract.Entities.Identity
 {
     public class ApplicationRole : IdentityRole<Guid>
     {
-        public ApplicationRole()
-        {
-
-        }
-
-        public ApplicationRole(string roleName)
-        {
-            this.Name = roleName;
-            this.Id = Guid.NewGuid();
-        }
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public virtual ICollection<ApplicationRoleClaim> RoleClaims { get; set; }
     }
 }

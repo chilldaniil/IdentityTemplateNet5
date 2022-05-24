@@ -1,8 +1,8 @@
 ﻿namespace App.DataContract.Entities.Enums
 {
-    public enum AppRoleTypes
+    public enum ApplicationRoles
     {
         Admin = 1,
-        User = 2
+        Customer = 2
     }
 }

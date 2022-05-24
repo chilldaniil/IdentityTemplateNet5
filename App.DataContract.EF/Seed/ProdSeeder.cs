@@ -2,9 +2,13 @@
 {
     public sealed class ProdSeeder : BaseSeeder
     {
-        public void Run(ApplicationDbContext context)
+        private ProdSeeder()
         {
-            SeedRoles(context);
+
+        }
+
+        public static void Run(ApplicationDbContext context)
+        {
         }
     }
 }

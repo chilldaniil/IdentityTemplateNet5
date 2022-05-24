@@ -2,9 +2,13 @@
 {
     public sealed class TestSeeder : BaseSeeder
     {
-        public void Run(ApplicationDbContext context)
+        private TestSeeder()
         {
-            SeedRoles(context);
+
+        }
+
+        public static void Run(ApplicationDbContext context)
+        {
         }
     }
 }

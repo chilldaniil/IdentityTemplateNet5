@@ -1,5 +1,4 @@
-﻿using App.DataContract.EF.Seed;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -7,7 +6,7 @@ namespace App.DataContract.EF
 {
     public static class DatabaseInitializer
     {
-        public static IHost MigrateAndSeedDatabase(this IHost host)
+        public static IHost MigrateDatabase(this IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -16,7 +15,6 @@ namespace App.DataContract.EF
                     try
                     {
                         appContext.Database.Migrate();
-                        appContext.RunSeed();
                     }
                     catch
                     {

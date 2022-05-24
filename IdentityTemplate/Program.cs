@@ -8,7 +8,7 @@ namespace IdentityTemplate
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().MigrateAndSeedDatabase().Run();
+            CreateHostBuilder(args).Build().MigrateDatabase().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

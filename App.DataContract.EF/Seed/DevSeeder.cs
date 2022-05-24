@@ -1,10 +1,21 @@
-﻿namespace App.DataContract.EF.Seed
+﻿using BCryptNet = BCrypt.Net.BCrypt;
+
+namespace App.DataContract.EF.Seed
 {
     public sealed class DevSeeder : BaseSeeder
     {
-        public void Run(ApplicationDbContext context)
+        private DevSeeder()
         {
-            SeedRoles(context);
+
+        }
+
+        public static void Run(ApplicationDbContext context)
+        {
+            var password = "!234Qwer";
+            var passwordHash = BCryptNet.HashPassword(password);
+            var adminEmail = "admin@test.com";
+
+            CreateAdmin(context, adminEmail, "Super", "Admin", passwordHash);
         }
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using App.DataContract.EF;
+using App.DataContract.EF.Seed;
 using App.DataContract.Entities.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -65,6 +67,26 @@ namespace IdentityTemplate
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            SeedDatabase(app);
+        }
+
+        private void SeedDatabase(IApplicationBuilder app)
+        {
+            if (!string.Equals(Configuration.GetSection("AppSettings:RunSeedOnStartup").Value, "true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return;
+            }
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                if (context != null && context.Database != null)
+                {
+                    context.RunSeed();
+                    context.SaveChanges();
+                }
+            }
         }
     }
 }

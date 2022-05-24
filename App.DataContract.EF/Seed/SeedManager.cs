@@ -12,21 +12,16 @@ namespace App.DataContract.EF.Seed
 
                 if (string.Equals(environment, "development", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var seeder = new DevSeeder();
-                    seeder.Run(context);
+                    DevSeeder.Run(context);
                 }
                 if (string.Equals(environment, "test", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var seeder = new TestSeeder();
-                    seeder.Run(context);
+                    TestSeeder.Run(context);
                 }
                 if (string.Equals(environment, "production", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var seeder = new ProdSeeder();
-                    seeder.Run(context);
+                    ProdSeeder.Run(context);
                 }
-
-                context.SaveChanges();
             }
             catch
             {

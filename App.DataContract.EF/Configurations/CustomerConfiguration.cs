@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace App.DataContract.EF.Configurations
 {
-    public class AdminConfiguration : IEntityTypeConfiguration<Admin>
+    public class UserConfigurations : IEntityTypeConfiguration<Customer>
     {
-        public void Configure(EntityTypeBuilder<Admin> builder)
+        public void Configure(EntityTypeBuilder<Customer> builder)
         {
-            builder.ToTable("Admins");
+            builder.ToTable("Customers");
         }
     }
 }
