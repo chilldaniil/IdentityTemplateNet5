@@ -54,6 +54,6 @@ namespace App.DataContract.EF
         }
 
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<Customer> Customer { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

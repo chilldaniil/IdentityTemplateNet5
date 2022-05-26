@@ -1,14 +1,13 @@
 ﻿using System.Threading.Tasks;
 using App.DataContract.Entities.Enums;
 using App.Identity.Implementation;
-using IdentityTemplate.Models;
+using IdentityTemplate.Areas.Customer.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityTemplate.Controllers
+namespace IdentityTemplate.Areas.Customer.Controllers
 {
-    [AllowAnonymous]
-    public class AuthController : Controller
+    public class AuthController : BaseCustomerController
     {
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
@@ -22,6 +21,7 @@ namespace IdentityTemplate.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             var loginViewModel = new LoginViewModel();
@@ -30,6 +30,7 @@ namespace IdentityTemplate.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -38,7 +39,7 @@ namespace IdentityTemplate.Controllers
                 var result = await _signInManager.PasswordSignWithRoleInAsync(user, viewModel.Password, true, false, ApplicationRoles.Customer);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

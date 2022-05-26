@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityTemplate.Areas.Admin.Controllers
 {
-    [AllowAnonymous]
     public class AuthController : BaseAdminController
     {
         private readonly ApplicationSignInManager _signInManager;
@@ -22,6 +21,7 @@ namespace IdentityTemplate.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             var loginViewModel = new LoginViewModel();
@@ -30,6 +30,7 @@ namespace IdentityTemplate.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -48,6 +49,20 @@ namespace IdentityTemplate.Areas.Admin.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
