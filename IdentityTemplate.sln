@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.DataContract.EF", "App.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Identity.Implementation", "App.Identity.Implementation\App.Identity.Implementation.csproj", "{18926C49-C2F7-41D5-8F7A-50DFBAE3F6FA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{4AA5DCF8-10BD-4C3A-810E-09EDB7E0646A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CQRS", "CQRS", "{840DAA50-81BB-4CB4-8448-25F271A5539E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
