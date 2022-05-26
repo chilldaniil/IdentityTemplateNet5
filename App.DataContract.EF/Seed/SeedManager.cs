@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace App.DataContract.EF.Seed
 {
     public static class SeedManager
     {
-        public static void RunSeed(this ApplicationDbContext context)
+        public static async Task RunSeedAsync(this ApplicationDbContext context, IServiceProvider serviceProvider)
         {
             try
             {
@@ -12,16 +13,18 @@ namespace App.DataContract.EF.Seed
 
                 if (string.Equals(environment, "development", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    DevSeeder.Run(context);
+                    await DevSeeder.RunAsync(context, serviceProvider);
                 }
                 if (string.Equals(environment, "test", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    TestSeeder.Run(context);
+                    await TestSeeder.RunAsync(context, serviceProvider);
                 }
                 if (string.Equals(environment, "production", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ProdSeeder.Run(context);
+                    await ProdSeeder.RunAsync(context, serviceProvider);
                 }
+
+                await context.SaveChangesAsync();
             }
             catch
             {

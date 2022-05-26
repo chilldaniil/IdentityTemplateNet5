@@ -1,55 +1,66 @@
 ﻿using System;
-using System.Linq;
+using System.Threading.Tasks;
 using App.DataContract.Entities;
 using App.DataContract.Entities.Enums;
 using App.DataContract.Entities.Identity;
+using App.Identity.Implementation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace App.DataContract.EF.Seed
 {
     public abstract class BaseSeeder
     {
-        protected static void CreateAdmin(ApplicationDbContext context, string email, string firstName, string lastName, string passwordHash)
+        protected static async Task CreateAdminAsync(ApplicationDbContext context, IServiceProvider serviceProvider, string email, string firstName, string lastName, string password)
         {
-            var admin = new Admin
-            {
-                Id = Guid.Parse("ACAF036F-11A2-4BA7-A66C-31E7487453A4"),
-                Email = email,
-                FirstName = firstName,
-                LastName = lastName,
-                UserName = $"{firstName} {lastName}",
-                NormalizedEmail = email.ToUpper(),
-                SecurityStamp = Guid.NewGuid().ToString(),
-                LockoutEnabled = true,
-                PasswordHash = passwordHash
-            };
+            var adminId = await EnsureAdminAsync(serviceProvider, password, email);
+            await EnsureRoleAsync(serviceProvider, adminId, ApplicationRoles.Admin.ToString());
 
-            var role = context.Roles.First(r => r.Name == ApplicationRoles.Admin.ToString());
-
-            var userRole = new ApplicationUserRole()
-            {
-                UserId = admin.Id,
-                RoleId = role.Id
-            };
-
-            if (context.Admins.Any(_ => _.Id == admin.Id))
-            {
-                return;
-            }
-
-            context.Admins.Add(admin);
-            context.UserRoles.Add(userRole);
+            var admin = await context.Admins.FirstOrDefaultAsync(_ => _.Id == adminId);
+            admin.FirstName = firstName;
+            admin.LastName = lastName;
         }
 
-        //protected void CreateAgentUser(GroomDbContext context, Agent agent, string email, string hash)
-        //{
-        //    var domainUser = new AgentUser
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        AgentId = agent.Id,
-        //        CreationDate = DateTime.UtcNow
-        //    };
+        private static async Task<Guid> EnsureAdminAsync(IServiceProvider serviceProvider, string password, string email)
+        {
+            var userManager = serviceProvider.GetService<ApplicationUserManager>();
 
-        //    CreateUser(context, domainUser, email, hash, GroomRole.Agent);
-        //}
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = new Admin
+                {
+                    UserName = email,
+                    NormalizedUserName = email.ToUpper(),
+                    Email = email,
+                    NormalizedEmail = email.ToUpper(),
+                    EmailConfirmed = true,
+                    Created = DateTime.UtcNow,
+                };
+                await userManager.CreateAsync(user, password);
+            }
+
+            return user.Id;
+        }
+
+        private static async Task<IdentityResult> EnsureRoleAsync(IServiceProvider serviceProvider, Guid userId, string role)
+        {
+            var roleManager = serviceProvider.GetRequiredService<ApplicationRoleManager>();
+
+            IdentityResult identityResult;
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                identityResult = await roleManager.CreateAsync(new ApplicationRole(role));
+            }
+
+            var userManager = serviceProvider.GetService<ApplicationUserManager>();
+
+            var user = await userManager.FindByIdAsync(userId.ToString());
+
+            identityResult = await userManager.AddToRoleAsync(user, role);
+
+            return identityResult;
+        }
     }
 }

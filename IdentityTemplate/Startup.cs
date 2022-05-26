@@ -2,6 +2,7 @@ using System;
 using App.DataContract.EF;
 using App.DataContract.EF.Seed;
 using App.DataContract.Entities.Identity;
+using App.Identity.Implementation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -30,8 +31,16 @@ namespace IdentityTemplate
 
             });
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.SignIn.RequireConfirmedPhoneNumber = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<ApplicationUserManager>()
+                .AddSignInManager<ApplicationSignInManager>()
+                .AddRoleManager<ApplicationRoleManager>()
                 .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
@@ -56,37 +65,18 @@ namespace IdentityTemplate
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "areas",
-                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists}/{controller=Auth}/{action=Login}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            SeedDatabase(app);
-        }
-
-        private void SeedDatabase(IApplicationBuilder app)
-        {
-            if (!string.Equals(Configuration.GetSection("AppSettings:RunSeedOnStartup").Value, "true", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return;
-            }
-
-            using (var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-                if (context != null && context.Database != null)
-                {
-                    context.RunSeed();
-                    context.SaveChanges();
-                }
-            }
         }
     }
 }

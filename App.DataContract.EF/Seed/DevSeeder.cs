@@ -1,4 +1,5 @@
-﻿using BCryptNet = BCrypt.Net.BCrypt;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace App.DataContract.EF.Seed
 {
@@ -9,13 +10,12 @@ namespace App.DataContract.EF.Seed
 
         }
 
-        public static void Run(ApplicationDbContext context)
+        public static async Task RunAsync(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
-            var password = "!234Qwer";
-            var passwordHash = BCryptNet.HashPassword(password);
+            var adminPassword = "!234Qwer";
             var adminEmail = "admin@test.com";
 
-            CreateAdmin(context, adminEmail, "Super", "Admin", passwordHash);
+            await CreateAdminAsync(context, serviceProvider, adminEmail, "Super", "Admin", adminPassword);
         }
     }
 }
