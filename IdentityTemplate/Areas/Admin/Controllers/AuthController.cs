@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using App.DataContract.Entities.Identity;
+using App.DataContract.Entities.Enums;
 using App.Identity.Implementation;
 using IdentityTemplate.Areas.Admin.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityTemplate.Areas.Admin.Controllers
@@ -36,7 +35,7 @@ namespace IdentityTemplate.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(viewModel.Email);
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, viewModel.Password, true, false);
+                var result = await _signInManager.PasswordSignWithRoleInAsync(user, viewModel.Password, true, false, ApplicationRoles.Admin);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Admin");
