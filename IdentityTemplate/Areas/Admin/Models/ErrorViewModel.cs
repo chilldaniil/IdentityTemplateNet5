@@ -1,6 +1,4 @@
-using System;
-
-namespace IdentityTemplate.Areas.Admin.ViewModels
+namespace IdentityTemplate.Areas.Admin.Models
 {
     public class ErrorViewModel
     {

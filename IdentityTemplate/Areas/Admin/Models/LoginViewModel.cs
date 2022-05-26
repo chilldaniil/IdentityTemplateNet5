@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IdentityTemplate.Areas.Admin.ViewModels
+namespace IdentityTemplate.Areas.Admin.Models
 {
     public class LoginViewModel
     {

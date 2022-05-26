@@ -1,6 +1,4 @@
-using System;
-
-namespace IdentityTemplate.Models
+﻿namespace IdentityTemplate.Models
 {
     public class ErrorViewModel
     {

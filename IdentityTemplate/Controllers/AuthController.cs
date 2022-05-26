@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using App.DataContract.Entities.Enums;
 using App.Identity.Implementation;
-using IdentityTemplate.Areas.Admin.Models;
+using IdentityTemplate.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityTemplate.Areas.Admin.Controllers
+namespace IdentityTemplate.Controllers
 {
     [AllowAnonymous]
-    public class AuthController : BaseAdminController
+    public class AuthController : Controller
     {
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
@@ -35,10 +35,10 @@ namespace IdentityTemplate.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(viewModel.Email);
-                var result = await _signInManager.PasswordSignWithRoleInAsync(user, viewModel.Password, true, false, ApplicationRoles.Admin);
+                var result = await _signInManager.PasswordSignWithRoleInAsync(user, viewModel.Password, true, false, ApplicationRoles.Customer);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Dashboard");
+                    return RedirectToAction("Index", "Admin");
                 }
                 else
                 {
@@ -48,6 +48,20 @@ namespace IdentityTemplate.Areas.Admin.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
