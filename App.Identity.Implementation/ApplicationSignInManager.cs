@@ -30,8 +30,7 @@ namespace App.Identity.Implementation
         public async Task<SignInResult> PasswordSignWithRoleInAsync(ApplicationUser user, string password, bool isPersistent, bool lockoutOnFailure, params ApplicationRoles[] roles)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
-            var userRole = userRoles[0];
-            var isUserInRightRole = roles.Any(role => role.ToString() == userRole);
+            var isUserInRightRole = roles.Any(role => role.ToString() == userRoles[0]);
 
             // Fastest way to get failed result for wrong role
             password = isUserInRightRole ? password : string.Empty;
