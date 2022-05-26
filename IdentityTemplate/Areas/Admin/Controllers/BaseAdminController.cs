@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using App.DataContract.Entities.Enums;
+using IdentityTemplate.MvcCustomization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityTemplate.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area(nameof(ApplicationRoles.Admin))]
+    [AreaAuthorization(nameof(ApplicationRoles.Admin))]
     public class BaseAdminController : Controller
     {
     }
