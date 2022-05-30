@@ -36,10 +36,10 @@ namespace IdentityTemplate.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(viewModel.Email);
-                var result = await _signInManager.PasswordSignWithRoleInAsync(user, viewModel.Password, true, false, ApplicationRoles.Admin);
+                var (result, role) = await _signInManager.PasswordSignInWithRoleAsync(user, viewModel.Password, true, false, ApplicationRoles.Admin);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Dashboard");
+                    return Redirect(GetRedirectUrl(role));
                 }
                 else
                 {
@@ -61,7 +61,7 @@ namespace IdentityTemplate.Areas.Admin.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
         }
     }

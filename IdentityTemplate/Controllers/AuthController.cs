@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using App.DataContract.Entities.Enums;
 using App.Identity.Implementation;
-using IdentityTemplate.Areas.Customer.Models;
+using IdentityTemplate.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace IdentityTemplate.Areas.Customer.Controllers
+namespace IdentityTemplate.Controllers
 {
-    public class AuthController : BaseCustomerController
+    [AllowAnonymous]
+    public class AuthController : GlobalBaseController
     {
         private readonly ApplicationSignInManager _signInManager;
         private readonly ApplicationUserManager _userManager;
@@ -21,7 +22,6 @@ namespace IdentityTemplate.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Login()
         {
             var loginViewModel = new LoginViewModel();
@@ -30,7 +30,6 @@ namespace IdentityTemplate.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -49,20 +48,6 @@ namespace IdentityTemplate.Areas.Customer.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout(string returnUrl = null)
-        {
-            await _signInManager.SignOutAsync();
-            if (returnUrl != null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
         }
     }
 }

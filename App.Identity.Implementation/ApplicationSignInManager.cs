@@ -27,17 +27,18 @@ namespace App.Identity.Implementation
             _userManager = userManager;
         }
 
-        public async Task<SignInResult> PasswordSignWithRoleInAsync(ApplicationUser user, string password, bool isPersistent, bool lockoutOnFailure, params ApplicationRoles[] roles)
+        public async Task<(SignInResult result, string userRole)> PasswordSignInWithRoleAsync(ApplicationUser user, string password, bool isPersistent, bool lockoutOnFailure, params ApplicationRoles[] roles)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
-            var isUserInRightRole = roles.Any(role => role.ToString() == userRoles[0]);
+            var userRole = userRoles[0];
+            var isUserInRightRole = roles.Any(role => role.ToString() == userRole);
 
             // Fastest way to get failed result for wrong role
             password = isUserInRightRole ? password : string.Empty;
 
             var result = await base.PasswordSignInAsync(user, password, isPersistent, lockoutOnFailure);
 
-            return result;
+            return (result, userRole);
         }
     }
 }

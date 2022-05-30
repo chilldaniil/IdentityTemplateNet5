@@ -14,31 +14,30 @@ namespace App.DataContract.EF
         /// </summary>
         public static IHost MigrateAndSeedDatabase(this IHost host)
         {
-            using (var scope = host.Services.CreateScope())
+            using var scope = host.Services.CreateScope();
+
+            var services = scope.ServiceProvider;
+
+            using (var appContext = services.GetRequiredService<ApplicationDbContext>())
             {
-                var services = scope.ServiceProvider;
-
-                using (var appContext = services.GetRequiredService<ApplicationDbContext>())
+                try
                 {
-                    try
-                    {
-                        appContext.Database.Migrate();
+                    appContext.Database.Migrate();
 
-                        var configuration = host.Services.GetRequiredService<IConfiguration>();
+                    var configuration = host.Services.GetRequiredService<IConfiguration>();
 
-                        if (string.Equals(configuration.GetSection("AppSettings:RunSeedOnStartup").Value, "true", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            appContext.RunSeedAsync(services).Wait();
-                        }
-                    }
-                    catch
+                    if (string.Equals(configuration.GetSection("AppSettings:RunSeedOnStartup").Value, "true", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        throw;
+                        appContext.RunSeedAsync(services).Wait();
                     }
                 }
-
-                return host;
+                catch
+                {
+                    throw;
+                }
             }
+
+            return host;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace IdentityTemplate.MvcCustomization
+namespace IdentityTemplate.MvcCustomization.Attributes
 {
     public class AreaAuthorizationAttribute : AuthorizeAttribute
     {

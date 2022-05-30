@@ -1,12 +1,13 @@
 ﻿using App.DataContract.Entities.Enums;
-using IdentityTemplate.MvcCustomization;
+using IdentityTemplate.Controllers;
+using IdentityTemplate.MvcCustomization.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityTemplate.Areas.Customer.Controllers
 {
     [Area(nameof(ApplicationRoles.Customer))]
     [AreaAuthorization(nameof(ApplicationRoles.Customer))]
-    public class BaseCustomerController : Controller
+    public class BaseCustomerController : GlobalBaseController
     {
 
     }

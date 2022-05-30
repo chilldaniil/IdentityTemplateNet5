@@ -82,7 +82,7 @@ namespace IdentityTemplate
                     pattern: "{area:exists}/{controller=Auth}/{action=Login}/{id?}");
 
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "myMap",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }

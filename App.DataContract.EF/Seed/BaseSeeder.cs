@@ -79,17 +79,16 @@ namespace App.DataContract.EF.Seed
         {
             var roleManager = serviceProvider.GetRequiredService<ApplicationRoleManager>();
 
-            IdentityResult identityResult;
             if (!await roleManager.RoleExistsAsync(role))
             {
-                identityResult = await roleManager.CreateAsync(new ApplicationRole(role));
+                await roleManager.CreateAsync(new ApplicationRole(role));
             }
 
             var userManager = serviceProvider.GetService<ApplicationUserManager>();
 
             var user = await userManager.FindByIdAsync(userId.ToString());
 
-            identityResult = await userManager.AddToRoleAsync(user, role);
+            var identityResult = await userManager.AddToRoleAsync(user, role);
 
             return identityResult;
         }
